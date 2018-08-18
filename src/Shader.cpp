@@ -40,31 +40,38 @@ void Shader::unbind() {
 }
 
 void Shader::setUniform(const char *name, float value) {
-
+    glUseProgram(_program);
+    glUniform1f(glGetUniformLocation(_program, name), value);
 }
 
 void Shader::setUniform(const char *name, glm::vec2 value) {
-
+    glUseProgram(_program);
+    glUniform2f(glGetUniformLocation(_program, name), value.x, value.y);
 }
 
 void Shader::setUniform(const char *name, glm::vec3 value) {
-
+    glUseProgram(_program);
+    glUniform3f(glGetUniformLocation(_program, name), value.x, value.y, value.z);
 }
 
 void Shader::setUniform(const char *name, glm::vec4 value) {
-
+    glUseProgram(_program);
+    glUniform4f(glGetUniformLocation(_program, name), value.x, value.y, value.z, value.w);
 }
 
 void Shader::setUniform(const char *name, glm::mat2 value) {
-
+    glUseProgram(_program);
+    glUniformMatrix2fv(glGetUniformLocation(_program, name), 1, GL_FALSE, &value[0][0]);
 }
 
 void Shader::setUniform(const char *name, glm::mat3 value) {
-
+    glUseProgram(_program);
+    glUniformMatrix3fv(glGetUniformLocation(_program, name), 1, GL_FALSE, &value[0][0]);
 }
 
 void Shader::setUniform(const char *name, glm::mat4 value) {
-
+    glUseProgram(_program);
+    glUniformMatrix4fv(glGetUniformLocation(_program, name), 1, GL_FALSE, &value[0][0]);
 }
 
 GLuint Shader::loadShader(GLenum type, const std::string &src) {
