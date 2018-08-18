@@ -12,7 +12,7 @@ find_package(OpenCASCADE COMPONENTS DataExchange REQUIRED)
 include_directories(${OpenCASCADE_INCLUDE_DIR})
 
 FILE(GLOB_RECURSE SOURCES "*.cpp")
-FILE(GLOB_RECURSE HEADERS "*.hpp")
+FILE(GLOB_RECURSE HEADERS "*.h")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 

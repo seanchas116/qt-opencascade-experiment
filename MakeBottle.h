@@ -1,11 +1,7 @@
-#ifndef MAKEBOTTLE_H
-#define MAKEBOTTLE_H
+#pragma once
 
+#include <TopoDS.hxx>
 
-class MakeBottle
-{
-public:
-    MakeBottle();
-};
-
-#endif // MAKEBOTTLE_H
+TopoDS_Shape
+MakeBottle(const double myWidth, const double myHeight,
+           const double myThickness);
