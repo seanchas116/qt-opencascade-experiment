@@ -1,9 +1,11 @@
 #include <QApplication>
 #include <QWidget>
+#include "RenderView.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-    QWidget w;
+
+    RenderView w;
     w.show();
     return a.exec();
 }
