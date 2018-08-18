@@ -16,4 +16,4 @@ FILE(GLOB_RECURSE HEADERS "*.h")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets ${OpenCASCADE_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets ${OpenCASCADE_FoundationClasses_LIBRARIES} ${OpenCASCADE_ModelingData_LIBRARIES} ${OpenCASCADE_ModelingAlgorithms_LIBRARIES})
