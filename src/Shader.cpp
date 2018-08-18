@@ -18,9 +18,11 @@ Shader::Shader(const std::string &vertexShader, const std::string &fragmentShade
         GLint logLen;
         glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLen);
 
-        std::vector<char> log(logLen, 0);
+        std::vector<char> log(size_t(logLen), 0);
         glGetProgramInfoLog(program, logLen, nullptr, log.data());
         qWarning() << log.data();
+
+        glDeleteProgram(_program);
     }
     _program = program;
 }
@@ -78,7 +80,7 @@ GLuint Shader::loadShader(GLenum type, const std::string &src) {
         GLint logLen;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLen);
 
-        std::vector<char> log(logLen, 0);
+        std::vector<char> log(size_t(logLen), 0);
         glGetShaderInfoLog(shader, logLen, nullptr, log.data());
         qWarning() << log.data();
 
