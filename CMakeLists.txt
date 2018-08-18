@@ -6,7 +6,14 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5Widgets)
+find_package(OpenCASCADE COMPONENTS FoundationClasses REQUIRED)
+find_package(OpenCASCADE COMPONENTS ModelingData REQUIRED)
+find_package(OpenCASCADE COMPONENTS DataExchange REQUIRED)
+include_directories(${OpenCASCADE_INCLUDE_DIR})
 
-add_executable(${PROJECT_NAME} "main.cpp")
+FILE(GLOB_RECURSE SOURCES "*.cpp")
+FILE(GLOB_RECURSE HEADERS "*.hpp")
 
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets ${OpenCASCADE_LIBRARIES})
