@@ -4,7 +4,7 @@
 
 class Shader final : protected QOpenGLExtraFunctions {
 public:
-    Shader(const QString& vertexShader, const QString& fragmentShader);
+    Shader(const std::string& vertexShader, const std::string& fragmentShader);
     ~Shader();
 
     void bind();
@@ -17,4 +17,8 @@ public:
     void setUniform(const char* name, glm::mat2 value);
     void setUniform(const char* name, glm::mat3 value);
     void setUniform(const char* name, glm::mat4 value);
+
+private:
+    GLuint loadShader(GLenum type, const std::string& src);
+    GLuint _program;
 };
