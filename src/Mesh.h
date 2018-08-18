@@ -1,5 +1,6 @@
 #pragma once
 #include <QOpenGLExtraFunctions>
+#include <glm/vec2.hpp>
 
 class Mesh final : protected QOpenGLExtraFunctions {
 public:
