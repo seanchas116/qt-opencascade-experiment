@@ -1,10 +1,14 @@
 #include "RenderView.h"
+#include "Shader.h"
+#include "Mesh.h"
 
 RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
 }
 
 void RenderView::initializeGL() {
     initializeOpenGLFunctions();
+
+    _shader = Shader::fromFiles(":/Default.vert", ":/Default.frag");
 }
 
 void RenderView::resizeGL(int w, int h) {
