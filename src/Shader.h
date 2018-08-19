@@ -3,8 +3,9 @@
 #include <glm/glm.hpp>
 
 class Shader final : protected QOpenGLExtraFunctions {
+    Q_DISABLE_COPY(Shader)
 public:
-    Shader(const std::string& vertexShader, const std::string& fragmentShader);
+    Shader(const QByteArray& vertexShader, const QByteArray& fragmentShader);
     ~Shader();
 
     void bind();
@@ -18,7 +19,9 @@ public:
     void setUniform(const char* name, glm::mat3 value);
     void setUniform(const char* name, glm::mat4 value);
 
+    static std::shared_ptr<Shader> fromFiles(const QString& vertexShaderPath, const QString& fragmentShaderPath);
+
 private:
-    GLuint loadShader(GLenum type, const std::string& src);
+    GLuint loadShader(GLenum type, const QByteArray& src);
     GLuint _program;
 };

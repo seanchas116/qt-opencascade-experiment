@@ -1,7 +1,8 @@
 #include "Shader.h"
 #include <QtDebug>
+#include <QFile>
 
-Shader::Shader(const std::string &vertexShader, const std::string &fragmentShader) {
+Shader::Shader(const QByteArray &vertexShader, const QByteArray &fragmentShader) {
     initializeOpenGLFunctions();
 
     GLuint program = glCreateProgram();
@@ -18,11 +19,12 @@ Shader::Shader(const std::string &vertexShader, const std::string &fragmentShade
         GLint logLen;
         glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLen);
 
-        std::vector<char> log(size_t(logLen), 0);
+        QByteArray log(logLen, 0);
         glGetProgramInfoLog(program, logLen, nullptr, log.data());
-        qWarning() << log.data();
 
         glDeleteProgram(_program);
+
+        throw std::runtime_error(log.data());
     }
     _program = program;
 }
@@ -74,9 +76,28 @@ void Shader::setUniform(const char *name, glm::mat4 value) {
     glUniformMatrix4fv(glGetUniformLocation(_program, name), 1, GL_FALSE, &value[0][0]);
 }
 
-GLuint Shader::loadShader(GLenum type, const std::string &src) {
+std::shared_ptr<Shader> Shader::fromFiles(const QString &vertexShaderPath, const QString &fragmentShaderPath) {
+    auto loadText = [](const QString& path) {
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            throw std::runtime_error("Cannot load shader file");
+        }
+        return file.readAll();
+    };
+    return std::make_shared<Shader>(loadText(vertexShaderPath), loadText(fragmentShaderPath));
+}
+
+GLuint Shader::loadShader(GLenum type, const QByteArray &src) {
+    auto versionedSrc = src;
+    if (QOpenGLContext::currentContext()->isOpenGLES()) {
+        versionedSrc.prepend("#version 300 es\nprecision highp float;");
+    } else {
+        versionedSrc.prepend("#version 330\n");
+    }
+
     GLuint shader = glCreateShader(type);
-    const char* srcData = src.data();
+    const char* srcData = versionedSrc.data();
+
     glShaderSource(shader, 1, &srcData, nullptr);
     glCompileShader(shader);
 
@@ -87,12 +108,12 @@ GLuint Shader::loadShader(GLenum type, const std::string &src) {
         GLint logLen;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLen);
 
-        std::vector<char> log(size_t(logLen), 0);
+        QByteArray log(logLen, 0);
         glGetShaderInfoLog(shader, logLen, nullptr, log.data());
-        qWarning() << log.data();
 
         glDeleteShader(shader);
-        return 0;
+
+        throw std::runtime_error(log.data());
     }
 
     return shader;
