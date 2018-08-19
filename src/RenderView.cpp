@@ -9,6 +9,7 @@ void RenderView::initializeGL() {
     initializeOpenGLFunctions();
 
     _shader = Shader::fromFiles(":/Default.vert", ":/Default.frag");
+    _mesh = std::make_shared<Mesh>();
 }
 
 void RenderView::resizeGL(int w, int h) {
