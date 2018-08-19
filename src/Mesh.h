@@ -10,6 +10,7 @@ struct Vertex {
 };
 
 class Mesh final : protected QOpenGLExtraFunctions {
+    Q_DISABLE_COPY(Mesh)
 public:
     Mesh();
     ~Mesh();
