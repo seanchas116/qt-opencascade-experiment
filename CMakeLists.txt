@@ -10,6 +10,7 @@ find_package(OpenCASCADE COMPONENTS FoundationClasses REQUIRED)
 find_package(OpenCASCADE COMPONENTS ModelingData REQUIRED)
 find_package(OpenCASCADE COMPONENTS DataExchange REQUIRED)
 include_directories(${OpenCASCADE_INCLUDE_DIR})
+include_directories("vendor/glm")
 
 FILE(GLOB_RECURSE SOURCES "src/*.cpp")
 FILE(GLOB_RECURSE HEADERS "src/*.h")
