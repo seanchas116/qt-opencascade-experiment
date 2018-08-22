@@ -9,6 +9,7 @@ find_package(Qt5Widgets)
 find_package(OpenCASCADE COMPONENTS FoundationClasses REQUIRED)
 find_package(OpenCASCADE COMPONENTS ModelingData REQUIRED)
 find_package(OpenCASCADE COMPONENTS DataExchange REQUIRED)
+link_directories(${OpenCASCADE_LIBRARY_DIR})
 include_directories(${OpenCASCADE_INCLUDE_DIR})
 include_directories("vendor/glm")
 
