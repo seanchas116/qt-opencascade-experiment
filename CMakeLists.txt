@@ -10,6 +10,9 @@ find_package(OpenCASCADE COMPONENTS FoundationClasses REQUIRED)
 find_package(OpenCASCADE COMPONENTS ModelingData REQUIRED)
 find_package(OpenCASCADE COMPONENTS DataExchange REQUIRED)
 link_directories(${OpenCASCADE_LIBRARY_DIR})
+if (WIN32)
+    link_directories("C:/OpenCASCADE-7.3.0-vc14-64/tbb_2017.0.100/lib/intel64/vc14") #TODO: avoid hard conding tbb path
+endif(WIN32)
 include_directories(${OpenCASCADE_INCLUDE_DIR})
 include_directories("vendor/glm")
 
