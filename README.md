@@ -1,24 +1,25 @@
 # qt-opencascade-experiment
 Qt + Open CASCADE experiment
 
-# Prerequisites
+## Prerequisites
 
-## Both
+### Both
 
 Install Qt from official installer
 
-## Mac
+### Mac
 
 `brew install opencascade`
 
-## Windows
+### Windows
 
 Install Open CASCADE from official installer
 
-# Build
+## Build
 
 Open CMakeLists.txt in Qt Creator
 
 ## Windows
 
-Set cmake variable `OpenCASCADE_DIR` to `C:\OpenCASCADE-{version}-vc14-64\opencascade-{version}\cmake`
+* Set cmake variable `OpenCASCADE_DIR` to `C:\OpenCASCADE-{version}-vc14-64\opencascade-{version}\cmake`
+* Add OpenCascade and tbb .dll path to `Path` environment variable
