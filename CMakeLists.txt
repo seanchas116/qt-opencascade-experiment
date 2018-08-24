@@ -5,6 +5,9 @@ project(qt-opencascade-experiment)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
+add_definitions(-DGLM_FORCE_SWIZZLE=1)
+add_definitions(-D_USE_MATH_DEFINES)
+
 find_package(Qt5Widgets)
 find_package(OpenCASCADE COMPONENTS FoundationClasses REQUIRED)
 find_package(OpenCASCADE COMPONENTS ModelingData REQUIRED)

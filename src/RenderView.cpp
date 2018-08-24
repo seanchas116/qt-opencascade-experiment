@@ -4,6 +4,7 @@
 #include <array>
 #include <glm/gtc/matrix_transform.hpp>
 #include <QKeyEvent>
+#include <QtDebug>
 
 RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
     setFocus();
@@ -36,7 +37,19 @@ void RenderView::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     auto P = glm::perspective(glm::radians(90.f), float(width()) / float(height()), 0.1f, 100.f);
-    auto V = glm::lookAt(_cameraPos, _cameraPos + glm::vec3(0, 0, -1), glm::vec3(0, 1, 1));
+
+    glm::vec3 direction(
+        cos(_cameraRotation.x) * sin(_cameraRotation.y),
+        sin(_cameraRotation.x),
+        cos(_cameraRotation.x) * cos(_cameraRotation.y)
+    );
+    glm::vec3 right = glm::vec3(
+        sin(_cameraRotation.y - M_PI/2.0f),
+        0,
+        cos(_cameraRotation.y - M_PI/2.0f)
+    );
+
+    auto V = glm::lookAt(_cameraPos, _cameraPos + direction, glm::cross(right, direction));
     _shader->setUniform("MVP", P * V);
 
     _shader->bind();
@@ -64,4 +77,44 @@ void RenderView::keyPressEvent(QKeyEvent *event) {
 
 void RenderView::keyReleaseEvent(QKeyEvent *event) {
     _pressedKeys.remove(event->key());
+}
+
+void RenderView::mousePressEvent(QMouseEvent *event) {
+    switch (event->button()) {
+    case Qt::MiddleButton:
+        _dragMode = DragMode::Move;
+        break;
+    case Qt::RightButton:
+        _dragMode = DragMode::Rotate;
+        break;
+    default:
+        break;
+    }
+    _lastMousePos = event->pos();
+}
+
+void RenderView::mouseMoveEvent(QMouseEvent *event) {
+    QPoint offset = event->pos() - _lastMousePos;
+    switch (_dragMode) {
+    case DragMode::Move:
+        break;
+    case DragMode::Rotate: {
+        float unit = 0.25f / 180.f * M_PI;
+        _cameraRotation -= glm::vec3(offset.y() * unit, offset.x() * unit, 0);
+        update();
+        break;
+    }
+    default:
+        break;
+    }
+    _lastMousePos = event->pos();
+}
+
+void RenderView::mouseReleaseEvent(QMouseEvent *event) {
+    _dragMode = DragMode::None;
+}
+
+void RenderView::wheelEvent(QWheelEvent *event) {
+    _cameraPos += glm::vec3(0, 0, -0.01 * event->delta());
+    update();
 }
