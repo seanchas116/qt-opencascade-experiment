@@ -44,12 +44,13 @@ void RenderView::paintGL() {
         cos(_cameraRotation.x) * cos(_cameraRotation.y)
     );
     glm::vec3 right = glm::vec3(
-        sin(_cameraRotation.y - M_PI/2.0f),
+        sin(_cameraRotation.y - float(M_PI) * 0.5f),
         0,
-        cos(_cameraRotation.y - M_PI/2.0f)
+        cos(_cameraRotation.y - float(M_PI) * 0.5f)
     );
+    glm::vec3 up = glm::cross(right, direction);
 
-    auto V = glm::lookAt(_cameraPos, _cameraPos + direction, glm::cross(right, direction));
+    auto V = glm::lookAt(_cameraPos, _cameraPos + direction, up);
     _shader->setUniform("MVP", P * V);
 
     _shader->bind();
@@ -99,7 +100,7 @@ void RenderView::mouseMoveEvent(QMouseEvent *event) {
     case DragMode::Move:
         break;
     case DragMode::Rotate: {
-        float unit = 0.25f / 180.f * M_PI;
+        float unit = 0.25f / 180.f * (M_PI);
         _cameraRotation -= glm::vec3(offset.y() * unit, offset.x() * unit, 0);
         update();
         break;
