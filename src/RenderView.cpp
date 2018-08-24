@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include <array>
+#include <glm/gtc/matrix_transform.hpp>
 
 RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
 }
@@ -10,7 +11,6 @@ void RenderView::initializeGL() {
     initializeOpenGLFunctions();
 
     _shader = Shader::fromFiles(":/Default.vert", ":/Default.frag");
-    _shader->setUniform("MVP", glm::mat4(1));
     _mesh = std::make_shared<Mesh>();
 
     std::vector<Vertex> vertices = {
@@ -26,6 +26,15 @@ void RenderView::initializeGL() {
 }
 
 void RenderView::resizeGL(int w, int h) {
+    auto P = glm::perspective(glm::radians(90.f), float(width()) / float(height()), 0.1f, 100.f);
+
+    glm::vec3 cameraPos(0, -10, 10);
+    glm::vec3 cameraTarget(0);
+
+    auto V = glm::lookAt(cameraPos, cameraTarget, glm::vec3(0, 1, 1));
+
+    _shader->setUniform("MVP", P * V);
+
     glViewport(0, 0, w, h);
 }
 
