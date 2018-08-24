@@ -1,6 +1,8 @@
 #pragma once
 #include <QOpenGLWidget>
 #include <QOpenGLExtraFunctions>
+#include <QSet>
+#include <glm/vec3.hpp>
 
 class Mesh;
 class Shader;
@@ -13,8 +15,12 @@ protected:
     void initializeGL() override;
     void resizeGL(int w, int h) override;
     void paintGL() override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
     std::shared_ptr<Mesh> _mesh;
     std::shared_ptr<Shader> _shader;
+    glm::vec3 _cameraPos = {0, 10, 10};
+    QSet<int> _pressedKeys;
 };
