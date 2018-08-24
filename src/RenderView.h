@@ -21,6 +21,6 @@ protected:
 private:
     std::shared_ptr<Mesh> _mesh;
     std::shared_ptr<Shader> _shader;
-    glm::vec3 _cameraPos = {0, 10, 10};
+    glm::vec3 _cameraPos = {0, 0, 10};
     QSet<int> _pressedKeys;
 };
