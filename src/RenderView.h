@@ -3,6 +3,7 @@
 #include <QOpenGLExtraFunctions>
 #include <QSet>
 #include <glm/vec3.hpp>
+#include <cmath>
 
 class Mesh;
 class Shader;
