@@ -30,6 +30,11 @@ private:
     std::shared_ptr<Shader> _shader;
     glm::vec3 _cameraPos = {0, 0, 10};
     glm::vec3 _cameraRotation = {0, -M_PI, 0};
+    glm::vec3 _cameraDirection;
+    glm::vec3 _cameraRight;
+    glm::vec3 _cameraUp;
+
+    void updateCameraDirection();
 
     enum class DragMode {
         None,
