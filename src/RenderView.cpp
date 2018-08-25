@@ -54,6 +54,11 @@ void RenderView::initializeGL() {
             gp_Pnt p = nodes.Value(i);
             qDebug() << p.X() << p.Y();
         }
+        const Poly_Array1OfTriangle& triangles = triangulation->Triangles();
+        for (int i = triangles.Lower() ; i <= triangles.Upper(); ++i) {
+            Poly_Triangle t = triangles.Value(i);
+            qDebug() << t.Value(1) << t.Value(2) << t.Value(3);
+        }
     }
 }
 
