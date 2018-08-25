@@ -5,6 +5,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <QKeyEvent>
 #include <QtDebug>
+#include <TopExp_Explorer.hxx>
+#include <TopoDS_Face.hxx>
+#include <BRepMesh_IncrementalMesh.hxx>
+#include <BRep_Tool.hxx>
+#include <TopLoc_Location.hxx>
+#include "MakeBottle.hpp"
 
 RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
     setFocus();
@@ -14,6 +20,8 @@ RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
 
 void RenderView::initializeGL() {
     initializeOpenGLFunctions();
+
+    glCullFace(GL_BACK);
 
     _shader = Shader::fromFiles(":/Default.vert", ":/Default.frag");
     _mesh = std::make_shared<Mesh>();
@@ -28,6 +36,25 @@ void RenderView::initializeGL() {
     };
     _mesh->setTriangles(triangles);
     _mesh->setVertices(vertices);
+
+    auto shape = MakeBottle(100, 100, 1);
+
+    BRepMesh_IncrementalMesh meshing(shape, 0.01, false, 0.5);
+    meshing.Perform();
+
+    TopExp_Explorer explorer(shape, TopAbs_FACE);
+
+    for (; explorer.More(); explorer.Next()) {
+        TopoDS_Face face = TopoDS::Face(explorer.Current());
+        qDebug() << "Face: " << face.HashCode(0xFF);
+        TopLoc_Location location;
+        auto triangulation = BRep_Tool::Triangulation(face, location);
+        const TColgp_Array1OfPnt& nodes = triangulation->Nodes();
+        for (int i = nodes.Lower() ; i <= nodes.Upper(); ++i) {
+            gp_Pnt p = nodes.Value(i);
+            qDebug() << p.X() << p.Y();
+        }
+    }
 }
 
 void RenderView::resizeGL(int w, int h) {
@@ -86,8 +113,8 @@ void RenderView::mouseMoveEvent(QMouseEvent *event) {
     QPoint offset = event->pos() - _lastMousePos;
     switch (_dragMode) {
     case DragMode::Move: {
-        _cameraPos += _cameraUp * float(offset.y()) * 0.1f;
-        _cameraPos += -_cameraRight * float(offset.x()) * 0.1f;
+        _cameraPos += _cameraUp * float(offset.y()) * 0.05f;
+        _cameraPos += -_cameraRight * float(offset.x()) * 0.05f;
         updateCameraMatrix();
         break;
     }
