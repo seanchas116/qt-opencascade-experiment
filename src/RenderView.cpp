@@ -23,6 +23,8 @@ void RenderView::initializeGL() {
     initializeOpenGLFunctions();
 
     glCullFace(GL_BACK);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 
     _shader = Shader::fromFiles(":/Default.vert", ":/Default.frag");
     _mesh = std::make_shared<Mesh>();
@@ -50,7 +52,6 @@ void RenderView::initializeGL() {
 
     for (; explorer.More(); explorer.Next()) {
         TopoDS_Face face = TopoDS::Face(explorer.Current());
-        qDebug() << "Face: " << face.HashCode(0xFF);
         TopLoc_Location location;
         auto triangulation = BRep_Tool::Triangulation(face, location);
         Poly::ComputeNormals(triangulation);
@@ -88,7 +89,7 @@ void RenderView::resizeGL(int w, int h) {
 
 void RenderView::paintGL() {
     glClearColor(0.6f, 0.6f, 0.6f, 1.f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     _shader->setUniform("MVP", _projectionMatrix * _cameraMatrix);
     _shader->setUniform("MV", _cameraMatrix);
