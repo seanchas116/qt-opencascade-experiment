@@ -26,23 +26,26 @@ void RenderView::initializeGL() {
     _shader = Shader::fromFiles(":/Default.vert", ":/Default.frag");
     _mesh = std::make_shared<Mesh>();
 
-    std::vector<Vertex> vertices = {
-        {{0, -1, 0}, {0, 0}, {0, 0, 1}},
-        {{-1, 1, 0}, {0, 0}, {0, 0, 1}},
-        {{1, 1, 0}, {0, 0}, {0, 0, 1}},
-    };
-    std::vector<std::array<uint16_t, 3>> triangles = {
-        {{0, 1, 2}}
-    };
-    _mesh->setTriangles(triangles);
-    _mesh->setVertices(vertices);
+//    std::vector<Vertex> vertices = {
+//        {{0, -1, 0}, {0, 0}, {0, 0, 1}},
+//        {{-1, 1, 0}, {0, 0}, {0, 0, 1}},
+//        {{1, 1, 0}, {0, 0}, {0, 0, 1}},
+//    };
+//    std::vector<std::array<uint16_t, 3>> triangles = {
+//        {{0, 1, 2}}
+//    };
+//    _mesh->setTriangles(triangles);
+//    _mesh->setVertices(vertices);
 
-    auto shape = MakeBottle(100, 100, 1);
+    auto shape = MakeBottle(10, 10, 4);
 
     BRepMesh_IncrementalMesh meshing(shape, 0.01, false, 0.5);
     meshing.Perform();
 
     TopExp_Explorer explorer(shape, TopAbs_FACE);
+
+    std::vector<Vertex> vertices;
+    std::vector<std::array<uint16_t, 3>> triangleIndexes;
 
     for (; explorer.More(); explorer.Next()) {
         TopoDS_Face face = TopoDS::Face(explorer.Current());
@@ -50,16 +53,27 @@ void RenderView::initializeGL() {
         TopLoc_Location location;
         auto triangulation = BRep_Tool::Triangulation(face, location);
         const TColgp_Array1OfPnt& nodes = triangulation->Nodes();
+
+        int indexOffset = vertices.size() - nodes.Lower();
+
         for (int i = nodes.Lower() ; i <= nodes.Upper(); ++i) {
             gp_Pnt p = nodes.Value(i);
-            qDebug() << p.X() << p.Y();
+            glm::vec3 pos(p.X(), p.Y(), p.Z());
+            vertices.push_back({pos, {0, 0}, {0, 0, 1}});
         }
         const Poly_Array1OfTriangle& triangles = triangulation->Triangles();
         for (int i = triangles.Lower() ; i <= triangles.Upper(); ++i) {
             Poly_Triangle t = triangles.Value(i);
-            qDebug() << t.Value(1) << t.Value(2) << t.Value(3);
+            uint16_t t1 = t.Value(1) + indexOffset;
+            uint16_t t2 = t.Value(2) + indexOffset;
+            uint16_t t3 = t.Value(3) + indexOffset;
+            qDebug() << t1 << t2 << t3;
+            triangleIndexes.push_back({{t1, t2, t3}});
         }
     }
+
+    _mesh->setTriangles(triangleIndexes);
+    _mesh->setVertices(vertices);
 }
 
 void RenderView::resizeGL(int w, int h) {
