@@ -24,6 +24,7 @@ Shader::Shader(const QByteArray &vertexShader, const QByteArray &fragmentShader)
 
         glDeleteProgram(_program);
 
+        qWarning() << log.data();
         throw std::runtime_error(log.data());
     }
     _program = program;
@@ -113,6 +114,7 @@ GLuint Shader::loadShader(GLenum type, const QByteArray &src) {
 
         glDeleteShader(shader);
 
+        qWarning() << log.data();
         throw std::runtime_error(log.data());
     }
 

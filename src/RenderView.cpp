@@ -91,6 +91,7 @@ void RenderView::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     _shader->setUniform("MVP", _projectionMatrix * _cameraMatrix);
+    _shader->setUniform("MV", _cameraMatrix);
 
     _shader->bind();
     _mesh->draw();
