@@ -2,7 +2,7 @@
 #include <QOpenGLWidget>
 #include <QOpenGLExtraFunctions>
 #include <QSet>
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 #include <cmath>
 
 class Mesh;
@@ -29,13 +29,15 @@ protected:
 private:
     std::shared_ptr<Mesh> _mesh;
     std::shared_ptr<Shader> _shader;
+    glm::mat4 _projectionMatrix;
+    glm::mat4 _cameraMatrix;
     glm::vec3 _cameraPos = {0, 0, 10};
     glm::vec3 _cameraRotation = {0, -M_PI, 0};
     glm::vec3 _cameraDirection;
     glm::vec3 _cameraRight;
     glm::vec3 _cameraUp;
 
-    void updateCameraDirection();
+    void updateCameraMatrix();
 
     enum class DragMode {
         None,

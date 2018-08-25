@@ -9,7 +9,7 @@
 RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
     setFocus();
 
-    updateCameraDirection();
+    updateCameraMatrix();
 }
 
 void RenderView::initializeGL() {
@@ -32,15 +32,14 @@ void RenderView::initializeGL() {
 
 void RenderView::resizeGL(int w, int h) {
     glViewport(0, 0, w, h);
+    _projectionMatrix = glm::perspective(glm::radians(90.f), float(width()) / float(height()), 0.1f, 100.f);
 }
 
 void RenderView::paintGL() {
     glClearColor(0.6f, 0.6f, 0.6f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    auto P = glm::perspective(glm::radians(90.f), float(width()) / float(height()), 0.1f, 100.f);
-    auto V = glm::lookAt(_cameraPos, _cameraPos + _cameraDirection, _cameraUp);
-    _shader->setUniform("MVP", P * V);
+    _shader->setUniform("MVP", _projectionMatrix * _cameraMatrix);
 
     _shader->bind();
     _mesh->draw();
@@ -62,7 +61,7 @@ void RenderView::keyPressEvent(QKeyEvent *event) {
         _cameraPos += glm::vec3(1, 0, 0);
         break;
     }
-    update();
+    updateCameraMatrix();
 }
 
 void RenderView::keyReleaseEvent(QKeyEvent *event) {
@@ -89,14 +88,13 @@ void RenderView::mouseMoveEvent(QMouseEvent *event) {
     case DragMode::Move: {
         _cameraPos += _cameraUp * float(offset.y()) * 0.1f;
         _cameraPos += -_cameraRight * float(offset.x()) * 0.1f;
-        update();
+        updateCameraMatrix();
         break;
     }
     case DragMode::Rotate: {
         float unit = 0.25f / 180.f * float(M_PI);
         _cameraRotation -= glm::vec3(offset.y() * unit, offset.x() * unit, 0);
-        updateCameraDirection();
-        update();
+        updateCameraMatrix();
         break;
     }
     default:
@@ -112,10 +110,10 @@ void RenderView::mouseReleaseEvent(QMouseEvent *event) {
 
 void RenderView::wheelEvent(QWheelEvent *event) {
     _cameraPos += _cameraDirection * (0.01f * event->delta());
-    update();
+    updateCameraMatrix();
 }
 
-void RenderView::updateCameraDirection() {
+void RenderView::updateCameraMatrix() {
     _cameraDirection = glm::vec3(
         cos(_cameraRotation.x) * sin(_cameraRotation.y),
         sin(_cameraRotation.x),
@@ -127,4 +125,6 @@ void RenderView::updateCameraDirection() {
         cos(_cameraRotation.y - float(M_PI) * 0.5f)
     );
     _cameraUp = glm::cross(_cameraRight, _cameraDirection);
+    _cameraMatrix = glm::lookAt(_cameraPos, _cameraPos + _cameraDirection, _cameraUp);
+    update();
 }
