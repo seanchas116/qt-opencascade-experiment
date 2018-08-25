@@ -20,7 +20,7 @@ include_directories(${OpenCASCADE_INCLUDE_DIR})
 include_directories("vendor/glm")
 
 FILE(GLOB_RECURSE SOURCES "src/*.cpp")
-FILE(GLOB_RECURSE HEADERS "src/*.h")
+FILE(GLOB_RECURSE HEADERS "src/*.hpp")
 qt5_add_resources(RESOURCES "src/resources.qrc")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${RESOURCES})

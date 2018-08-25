@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QSurfaceFormat>
-#include "RenderView.h"
+#include "RenderView.hpp"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);

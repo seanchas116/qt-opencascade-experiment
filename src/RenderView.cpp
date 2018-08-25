@@ -1,6 +1,6 @@
-#include "RenderView.h"
-#include "Shader.h"
-#include "Mesh.h"
+#include "RenderView.hpp"
+#include "Shader.hpp"
+#include "Mesh.hpp"
 #include <array>
 #include <glm/gtc/matrix_transform.hpp>
 #include <QKeyEvent>
