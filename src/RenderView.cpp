@@ -10,6 +10,7 @@
 #include <BRepMesh_IncrementalMesh.hxx>
 #include <BRep_Tool.hxx>
 #include <TopLoc_Location.hxx>
+#include <Poly.hxx>
 #include "MakeBottle.hpp"
 
 RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
@@ -52,14 +53,19 @@ void RenderView::initializeGL() {
         qDebug() << "Face: " << face.HashCode(0xFF);
         TopLoc_Location location;
         auto triangulation = BRep_Tool::Triangulation(face, location);
+        Poly::ComputeNormals(triangulation);
+
         const TColgp_Array1OfPnt& nodes = triangulation->Nodes();
+        auto& normals = triangulation->Normals();
 
         int indexOffset = vertices.size() - nodes.Lower();
 
-        for (int i = nodes.Lower() ; i <= nodes.Upper(); ++i) {
-            gp_Pnt p = nodes.Value(i);
+        for (int i = 0; i < nodes.Length(); ++i) {
+            gp_Pnt p = nodes.Value(nodes.Lower() + i);
             glm::vec3 pos(p.X(), p.Y(), p.Z());
-            vertices.push_back({pos, {0, 0}, {0, 0, 1}});
+            int normalIndex = normals.Lower() + i * 3;
+            glm::vec3 normal(normals.Value(normalIndex), normals.Value(normalIndex + 1), normals.Value(normalIndex + 2));
+            vertices.push_back({pos, {0, 0}, normal});
         }
         const Poly_Array1OfTriangle& triangles = triangulation->Triangles();
         for (int i = triangles.Lower() ; i <= triangles.Upper(); ++i) {
@@ -67,7 +73,6 @@ void RenderView::initializeGL() {
             uint16_t t1 = t.Value(1) + indexOffset;
             uint16_t t2 = t.Value(2) + indexOffset;
             uint16_t t3 = t.Value(3) + indexOffset;
-            qDebug() << t1 << t2 << t3;
             triangleIndexes.push_back({{t1, t2, t3}});
         }
     }
