@@ -27,7 +27,7 @@ void RenderView::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    _shader = Shader::fromFiles(":/Default.vert", ":/Default.frag");
+    _shader = Shader::fromFiles(":/Face.vert", ":/Face.frag");
     _mesh = std::make_shared<Mesh>();
 
 //    std::vector<Vertex> vertices = {

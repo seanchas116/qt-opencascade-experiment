@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>Default.frag</file>
-        <file>Default.vert</file>
+        <file>Face.frag</file>
+        <file>Face.vert</file>
+        <file>Line.frag</file>
+        <file>Line.vert</file>
     </qresource>
 </RCC>
