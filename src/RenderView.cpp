@@ -11,6 +11,7 @@
 #include <BRep_Tool.hxx>
 #include <TopLoc_Location.hxx>
 #include <Poly.hxx>
+#include <GeomLProp_SLProps.hxx>
 #include "MakeBottle.hpp"
 
 RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
@@ -54,19 +55,21 @@ void RenderView::initializeGL() {
         TopoDS_Face face = TopoDS::Face(explorer.Current());
         TopLoc_Location location;
         auto triangulation = BRep_Tool::Triangulation(face, location);
-        Poly::ComputeNormals(triangulation);
 
         const TColgp_Array1OfPnt& nodes = triangulation->Nodes();
-        auto& normals = triangulation->Normals();
 
         int indexOffset = vertices.size() - nodes.Lower();
 
         for (int i = 0; i < nodes.Length(); ++i) {
             gp_Pnt p = nodes.Value(nodes.Lower() + i);
             glm::vec3 pos(p.X(), p.Y(), p.Z());
-            int normalIndex = normals.Lower() + i * 3;
-            glm::vec3 normal(normals.Value(normalIndex), normals.Value(normalIndex + 1), normals.Value(normalIndex + 2));
-            vertices.push_back({pos, {0, 0}, normal});
+
+            gp_Pnt2d uv = triangulation->UVNodes()(triangulation->UVNodes().Lower() + i);
+
+            auto surface = BRep_Tool::Surface(face);
+            GeomLProp_SLProps props(surface, uv.X(), uv.Y(), 1, 0.01);
+            auto normal = props.Normal();
+            vertices.push_back({pos, {0, 0}, {normal.X(), normal.Y(), normal.Z()}});
         }
         const Poly_Array1OfTriangle& triangles = triangulation->Triangles();
         for (int i = triangles.Lower() ; i <= triangles.Upper(); ++i) {
