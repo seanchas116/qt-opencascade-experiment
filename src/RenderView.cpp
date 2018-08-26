@@ -69,7 +69,11 @@ void RenderView::initializeGL() {
             auto surface = BRep_Tool::Surface(face);
             GeomLProp_SLProps props(surface, uv.X(), uv.Y(), 1, 0.01);
             auto normal = props.Normal();
-            vertices.push_back({pos, {0, 0}, {normal.X(), normal.Y(), normal.Z()}});
+            glm::vec3 n(normal.X(), normal.Y(), normal.Z());
+            if (face.Orientation() == TopAbs_REVERSED) {
+                n = -n;
+            }
+            vertices.push_back({pos, {0, 0}, n});
         }
         const Poly_Array1OfTriangle& triangles = triangulation->Triangles();
         for (int i = triangles.Lower() ; i <= triangles.Upper(); ++i) {
