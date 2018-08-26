@@ -90,6 +90,34 @@ void RenderView::initializeGL() {
 
     _mesh->setTriangles(triangleIndexes);
     _mesh->setVertices(vertices);
+
+    std::vector<glm::vec3> linePositions;
+    std::vector<std::array<uint16_t, 2>> lines;
+
+    TopExp_Explorer edgeExplorer(shape, TopAbs_EDGE);
+    for (; edgeExplorer.More(); edgeExplorer.Next()) {
+        auto edge = TopoDS::Edge(edgeExplorer.Current());
+        Handle(Poly_PolygonOnTriangulation) polygon;
+        Handle(Poly_Triangulation) triangulation;
+        TopLoc_Location location;
+        BRep_Tool::PolygonOnTriangulation(edge, polygon, triangulation, location);
+
+        bool first = true;
+        for (auto i : polygon->Nodes()) {
+            auto p = triangulation->Nodes().Value(i);
+            glm::vec3 pos(p.X(), p.Y(), p.Z());
+            linePositions.push_back(pos);
+            if (!first) {
+                uint16_t i1 = linePositions.size() - 2;
+                uint16_t i2 = linePositions.size() - 1;
+                lines.push_back({i1, i2});
+            }
+            first = false;
+        }
+    }
+
+    _edgeMesh->setLines(lines);
+    _edgeMesh->setPositions(linePositions);
 }
 
 void RenderView::resizeGL(int w, int h) {
@@ -103,9 +131,13 @@ void RenderView::paintGL() {
 
     _shader->setUniform("MVP", _projectionMatrix * _cameraMatrix);
     _shader->setUniform("MV", _cameraMatrix);
+    _edgeShader->setUniform("MVP", _projectionMatrix * _cameraMatrix);
 
     _shader->bind();
     _mesh->draw();
+
+    _edgeShader->bind();
+    _edgeMesh->draw();
 }
 
 void RenderView::keyPressEvent(QKeyEvent *event) {
