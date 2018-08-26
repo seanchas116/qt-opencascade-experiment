@@ -107,21 +107,6 @@ void RenderView::paintGL() {
 
 void RenderView::keyPressEvent(QKeyEvent *event) {
     _pressedKeys.insert(event->key());
-    switch (event->key()) {
-    case Qt::Key_W:
-        _cameraPos += glm::vec3(0, 0, -1);
-        break;
-    case Qt::Key_S:
-        _cameraPos += glm::vec3(0, 0, 1);
-        break;
-    case Qt::Key_A:
-        _cameraPos += glm::vec3(-1, 0, 0);
-        break;
-    case Qt::Key_D:
-        _cameraPos += glm::vec3(1, 0, 0);
-        break;
-    }
-    updateCameraMatrix();
 }
 
 void RenderView::keyReleaseEvent(QKeyEvent *event) {
@@ -129,15 +114,12 @@ void RenderView::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void RenderView::mousePressEvent(QMouseEvent *event) {
-    switch (event->button()) {
-    case Qt::MiddleButton:
+    if (_pressedKeys.contains(Qt::Key_Space) || event->button() == Qt::MiddleButton) {
         _dragMode = DragMode::Move;
-        break;
-    case Qt::RightButton:
+    } else if (event->button() == Qt::RightButton) {
         _dragMode = DragMode::Rotate;
-        break;
-    default:
-        break;
+    } else {
+        return;
     }
     _lastMousePos = event->pos();
 }
