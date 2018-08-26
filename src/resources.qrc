@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file>Face.frag</file>
         <file>Face.vert</file>
-        <file>Line.frag</file>
-        <file>Line.vert</file>
+        <file>Edge.frag</file>
+        <file>Edge.vert</file>
     </qresource>
 </RCC>

@@ -13,6 +13,7 @@
 #include <Poly.hxx>
 #include <GeomLProp_SLProps.hxx>
 #include "MakeBottle.hpp"
+#include "LineMesh.hpp"
 
 RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
     setFocus();
@@ -29,6 +30,8 @@ void RenderView::initializeGL() {
 
     _shader = Shader::fromFiles(":/Face.vert", ":/Face.frag");
     _mesh = std::make_shared<Mesh>();
+    _edgeMesh = std::make_shared<LineMesh>();
+    _edgeShader = Shader::fromFiles(":/Edge.vert", ":/Edge.frag");
 
 //    std::vector<Vertex> vertices = {
 //        {{0, -1, 0}, {0, 0}, {0, 0, 1}},

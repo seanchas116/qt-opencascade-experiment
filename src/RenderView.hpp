@@ -6,6 +6,7 @@
 #include <cmath>
 
 class Mesh;
+class LineMesh;
 class Shader;
 
 class RenderView : public QOpenGLWidget, protected QOpenGLExtraFunctions {
@@ -29,6 +30,8 @@ protected:
 private:
     std::shared_ptr<Mesh> _mesh;
     std::shared_ptr<Shader> _shader;
+    std::shared_ptr<LineMesh> _edgeMesh;
+    std::shared_ptr<Shader> _edgeShader;
     glm::mat4 _projectionMatrix;
     glm::mat4 _cameraMatrix;
     glm::vec3 _cameraPos = {0, 0, 10};
