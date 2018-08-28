@@ -62,7 +62,7 @@ void RenderView::initializeGL() {
 
             const TColgp_Array1OfPnt& nodes = triangulation->Nodes();
 
-            int indexOffset = vertices.size() - nodes.Lower();
+            int indexOffset = int(vertices.size()) - nodes.Lower();
 
             for (int i = 0; i < nodes.Length(); ++i) {
                 gp_Pnt p = nodes.Value(nodes.Lower() + i);
@@ -82,9 +82,9 @@ void RenderView::initializeGL() {
             const Poly_Array1OfTriangle& triangles = triangulation->Triangles();
             for (int i = triangles.Lower() ; i <= triangles.Upper(); ++i) {
                 Poly_Triangle t = triangles.Value(i);
-                uint16_t t1 = t.Value(1) + indexOffset;
-                uint16_t t2 = t.Value(2) + indexOffset;
-                uint16_t t3 = t.Value(3) + indexOffset;
+                auto t1 = uint16_t(t.Value(1) + indexOffset);
+                auto t2 = uint16_t(t.Value(2) + indexOffset);
+                auto t3 = uint16_t(t.Value(3) + indexOffset);
                 triangleIndexes.push_back({{t1, t2, t3}});
             }
         }
@@ -111,8 +111,8 @@ void RenderView::initializeGL() {
                 glm::vec3 pos(p.X(), p.Y(), p.Z());
                 lineVertices.push_back({pos});
                 if (!first) {
-                    uint16_t i1 = lineVertices.size() - 2;
-                    uint16_t i2 = lineVertices.size() - 1;
+                    auto i1 = uint16_t(lineVertices.size() - 2);
+                    auto i2 = uint16_t(lineVertices.size() - 1);
                     lines.push_back({i1, i2});
                 }
                 first = false;
