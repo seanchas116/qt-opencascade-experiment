@@ -153,9 +153,12 @@ void RenderView::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void RenderView::mousePressEvent(QMouseEvent *event) {
-    if (_pressedKeys.contains(Qt::Key_Space) || event->button() == Qt::MiddleButton) {
+    bool rotateKey = _pressedKeys.contains(Qt::Key_Space) && event->modifiers() & Qt::ShiftModifier;
+    bool moveKey = _pressedKeys.contains(Qt::Key_Space) && !(event->modifiers() & Qt::ShiftModifier);
+
+    if (moveKey || event->button() == Qt::MiddleButton) {
         _dragMode = DragMode::Move;
-    } else if (event->button() == Qt::RightButton) {
+    } else if (rotateKey || event->button() == Qt::RightButton) {
         _dragMode = DragMode::Rotate;
     } else {
         return;
