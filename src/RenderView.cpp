@@ -15,6 +15,8 @@
 #include "MakeBottle.hpp"
 #include "LineMesh.hpp"
 
+namespace ShapeEditor {
+
 RenderView::RenderView(QWidget* parent) : QOpenGLWidget(parent) {
     setFocus();
 
@@ -211,4 +213,6 @@ void RenderView::updateCameraMatrix() {
     _cameraUp = glm::cross(_cameraRight, _cameraDirection);
     _cameraMatrix = glm::lookAt(_cameraPos, _cameraPos + _cameraDirection, _cameraUp);
     update();
+}
+
 }

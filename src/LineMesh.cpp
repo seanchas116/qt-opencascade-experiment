@@ -1,6 +1,8 @@
 #include "LineMesh.hpp"
 #include <array>
 
+namespace ShapeEditor {
+
 LineMesh::LineMesh() {
     initializeOpenGLFunctions();
 
@@ -42,4 +44,6 @@ void LineMesh::setVertices(const std::vector<LineMesh::Vertex> &vertices) {
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(vertices.size() * sizeof(Vertex)), vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 }

@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <cmath>
 
+namespace ShapeEditor {
+
 class Mesh;
 class LineMesh;
 class Shader;
@@ -51,3 +53,5 @@ private:
     QPoint _lastMousePos;
     QSet<int> _pressedKeys;
 };
+
+}

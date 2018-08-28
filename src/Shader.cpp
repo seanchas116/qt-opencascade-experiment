@@ -2,6 +2,8 @@
 #include <QtDebug>
 #include <QFile>
 
+namespace ShapeEditor {
+
 Shader::Shader(const QByteArray &vertexShader, const QByteArray &fragmentShader) {
     initializeOpenGLFunctions();
 
@@ -119,4 +121,6 @@ GLuint Shader::loadShader(GLenum type, const QByteArray &src) {
     }
 
     return shader;
+}
+
 }

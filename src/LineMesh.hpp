@@ -3,6 +3,8 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
+namespace ShapeEditor {
+
 class LineMesh final : protected QOpenGLExtraFunctions {
     Q_DISABLE_COPY(LineMesh)
 public:
@@ -23,3 +25,5 @@ private:
     GLuint _indexBuffer = 0;
     int _lineCount = 0;
 };
+
+}

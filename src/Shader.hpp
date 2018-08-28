@@ -2,6 +2,8 @@
 #include <QOpenGLExtraFunctions>
 #include <glm/glm.hpp>
 
+namespace ShapeEditor {
+
 class Shader final : protected QOpenGLExtraFunctions {
     Q_DISABLE_COPY(Shader)
 public:
@@ -25,3 +27,5 @@ private:
     GLuint loadShader(GLenum type, const QByteArray& src);
     GLuint _program;
 };
+
+}

@@ -3,6 +3,8 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
+namespace ShapeEditor {
+
 class Mesh final : protected QOpenGLExtraFunctions {
     Q_DISABLE_COPY(Mesh)
 public:
@@ -25,3 +27,5 @@ private:
     GLuint _indexBuffer = 0;
     int _triangleCount = 0;
 };
+
+}

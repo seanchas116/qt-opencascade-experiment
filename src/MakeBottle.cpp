@@ -54,6 +54,8 @@
 
 #include "MakeBottle.hpp"
 
+namespace ShapeEditor {
+
 TopoDS_Shape
 MakeBottle(const double myWidth, const double myHeight,
            const double myThickness)
@@ -192,3 +194,4 @@ MakeBottle(const double myWidth, const double myHeight,
   return aRes;
 }
 
+}

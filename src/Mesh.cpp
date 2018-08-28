@@ -1,6 +1,8 @@
 #include "Mesh.hpp"
 #include <array>
 
+namespace ShapeEditor {
+
 Mesh::Mesh() {
     initializeOpenGLFunctions();
 
@@ -46,4 +48,6 @@ void Mesh::setVertices(const std::vector<Vertex> &vertices) {
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(vertices.size() * sizeof(Vertex)), vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 }

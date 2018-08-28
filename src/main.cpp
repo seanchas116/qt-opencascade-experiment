@@ -4,6 +4,8 @@
 #include "RenderView.hpp"
 
 int main(int argc, char *argv[]) {
+    using namespace ShapeEditor;
+
     QApplication a(argc, argv);
 
     QSurfaceFormat glFormat;
