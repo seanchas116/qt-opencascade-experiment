@@ -3,15 +3,15 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
-struct Vertex {
-    glm::vec3 position;
-    glm::vec2 texCoord;
-    glm::vec3 normal;
-};
-
 class Mesh final : protected QOpenGLExtraFunctions {
     Q_DISABLE_COPY(Mesh)
 public:
+    struct Vertex {
+        glm::vec3 position;
+        glm::vec2 texCoord;
+        glm::vec3 normal;
+    };
+
     Mesh();
     ~Mesh();
 

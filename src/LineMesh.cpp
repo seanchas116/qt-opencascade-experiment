@@ -10,7 +10,7 @@ LineMesh::LineMesh() {
 
     glBindVertexArray(_vertexArray);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), reinterpret_cast<void*>(0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(0));
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
 
@@ -38,8 +38,8 @@ void LineMesh::setLines(const std::vector<std::array<uint16_t, 2>> &lines) {
     _lineCount = int(lines.size());
 }
 
-void LineMesh::setPositions(const std::vector<glm::vec3> &positions) {
+void LineMesh::setVertices(const std::vector<LineMesh::Vertex> &vertices) {
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(positions.size() * sizeof(glm::vec3)), positions.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(vertices.size() * sizeof(Vertex)), vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

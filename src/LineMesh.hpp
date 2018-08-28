@@ -6,12 +6,16 @@
 class LineMesh final : protected QOpenGLExtraFunctions {
     Q_DISABLE_COPY(LineMesh)
 public:
+    struct Vertex {
+        glm::vec3 position;
+    };
+
     LineMesh();
     ~LineMesh();
 
     void draw();
     virtual void setLines(const std::vector<std::array<uint16_t, 2>>& lines);
-    virtual void setPositions(const std::vector<glm::vec3>& positions);
+    virtual void setVertices(const std::vector<Vertex>& vertices);
 
 private:
     GLuint _vertexArray = 0;
