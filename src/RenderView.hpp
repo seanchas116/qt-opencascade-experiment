@@ -7,9 +7,7 @@
 
 namespace ShapeEditor {
 
-class Mesh;
-class LineMesh;
-class Shader;
+class Shape;
 
 class RenderView : public QOpenGLWidget, protected QOpenGLExtraFunctions {
 public:
@@ -30,10 +28,7 @@ protected:
     void wheelEvent(QWheelEvent* event) override;
 
 private:
-    std::shared_ptr<Mesh> _mesh;
-    std::shared_ptr<Shader> _shader;
-    std::shared_ptr<LineMesh> _edgeMesh;
-    std::shared_ptr<Shader> _edgeShader;
+    std::shared_ptr<Shape> _shape;
     glm::mat4 _projectionMatrix;
     glm::mat4 _cameraMatrix;
     glm::vec3 _cameraPos = {0, 0, 10};
